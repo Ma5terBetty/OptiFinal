@@ -1,13 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
+using CustomPhysics;
+using CustomPhysics;
 using UnityEngine;
 
 public class CustomUpdateManager : MonoBehaviour
 {
     public static CustomUpdateManager Instance;
 
+    [SerializeField] private ColliderManager colliders;
     public List<GameplayElement> tickeableObjects;
     public List<CustomBody> tickeableBodies;
+    [field: SerializeField] public List<PhysicsBody> PhysicsBodies { get; private set; }
 
     float Gameplayfrequency = 0.01f;
     float GameplayFrameCounter = 0;
@@ -60,9 +64,35 @@ public class CustomUpdateManager : MonoBehaviour
 
     void PhysicsTick()
     {
+        colliders.CheckColliders();
+        
         for (int i = 0; i < tickeableBodies.Count; i++)
         {
             tickeableBodies[i].Tick();
         }
+
+        foreach (var body in PhysicsBodies)
+        {
+            body.Tick();
+        }
+    }
+
+    public void AddPhysicsBody(PhysicsBody body)
+    {
+        PhysicsBodies ??= new List<PhysicsBody>();
+
+        if (PhysicsBodies.Contains(body)) return;
+        
+        PhysicsBodies.Add(body);
+    }
+
+    public void RemovePhysicsBody(PhysicsBody body)
+    {
+        if(PhysicsBodies == null) return;
+
+        if (!PhysicsBodies.Contains(body)) return;
+
+        PhysicsBodies.Remove(body);
     }
 }
+
