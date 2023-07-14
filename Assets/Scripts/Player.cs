@@ -1,22 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
+using Custom.Physics;
 using UnityEngine;
+using Custom.UpdateManager;
 
 public class Player : GameplayElement
 {
-    CustomCollider collider;
-    CustomBody body;
-    [SerializeField] float playerSpeed;
+    [SerializeField] private float playerSpeed = 5;
+
+    private ICollider _collider;
+    private IBody _body;
+    private bool _hasCollider;
 
     private void Awake()
     {
-        collider = GetComponent<CustomCollider>();
-        body = GetComponent<CustomBody>();
+        _collider = GetComponent<ICollider>();
+        _body = GetComponent<IBody>();
+
+        _hasCollider = _collider != null;
     }
 
-    private void Start()
+    protected override void Start()
     {
-        CustomUpdateManager.Instance.tickeableObjects.Add(this);
+        base.Start();
+
+        _collider.OnCollision += OnCollisionHandler;
     }
 
     public override void Tick()
@@ -24,19 +30,32 @@ public class Player : GameplayElement
         PlayerInput();
     }
 
-    void PlayerInput()
+    private void PlayerInput()
     {
         if (Input.GetKey(KeyCode.A))
         {
-            body.SetVelocity(-playerSpeed);
+            _body.SetVelocity(Vector3.right * -playerSpeed);
         }
         else if (Input.GetKey(KeyCode.D))
         {
-            body.SetVelocity(playerSpeed);
+            _body.SetVelocity(Vector3.right * playerSpeed);
         }
         else
         { 
-            body.Stop();
+            _body.Freeze();
         }
+    }
+
+    private void OnCollisionHandler(ICollider other)
+    {
+        if (other.Layer != LayerMask.NameToLayer("Ball")) return;
+
+        if (!other.Owner.TryGetComponent(out Ball ball)) return;
+
+        var distToCenter = Vector3.Distance(transform.position,other.Position);
+
+        int rnd = Random.Range(2, 3);
+        
+        ball.SetDirection(distToCenter < 1 ? 1 : rnd);
     }
 }
