@@ -48,6 +48,14 @@ public class Player : GameplayElement
 
     private void OnCollisionHandler(ICollider other)
     {
+        if (other.Layer != LayerMask.NameToLayer("Ball")) return;
+
+        if (!other.Owner.TryGetComponent(out Ball ball)) return;
+
+        var distToCenter = Vector3.Distance(transform.position,other.Position);
+
+        int rnd = Random.Range(2, 3);
         
+        ball.SetDirection(distToCenter < 1 ? 1 : rnd);
     }
 }

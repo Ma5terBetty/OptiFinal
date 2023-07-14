@@ -7,6 +7,11 @@ using Custom.UpdateManager;
 public class Ball : GameplayElement
 {
     [SerializeField] private float speed = 10;
+
+    private int _speedMultiplier = 1;
+    private Vector3[] _directions;
+    private Vector3 _currDirection;
+    
     private ICollider _collider;
     private IBody _body;
     private bool _hasCollider;
@@ -25,21 +30,34 @@ public class Ball : GameplayElement
 
         if(_hasCollider)
             _collider.OnCollision += OnCollisionHandler;
+
+
+        _directions = new[]
+        {
+            Vector3.forward,
+            -Vector3.forward,
+            Vector3.forward + Vector3.right,
+            Vector3.forward + -Vector3.right,
+            -Vector3.forward + Vector3.right,
+            -Vector3.forward + -Vector3.right
+        };
+        
+        SetDirection(0);
     }
 
     public override void Tick()
     {
-        _body.SetVelocity(speed * Vector3.forward);
+        _body.SetVelocity(_currDirection * (speed * _speedMultiplier));
+    }
+
+    public void SetDirection(int index)
+    {
+        _currDirection = _directions[index];
     }
 
     private void OnCollisionHandler(ICollider other)
     {
-        if(other.CompareLayer(LayerMask.NameToLayer("Block")) 
-           || other.CompareLayer(LayerMask.NameToLayer("Player")))
-        {
-                
-            Debug.Log("Collision");
-            speed *= 0;
-        }
+        Debug.Log("Here");
+        _speedMultiplier *= -1;
     }
 }

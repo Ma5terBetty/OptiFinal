@@ -10,6 +10,7 @@ namespace Custom.Physics
         public Vector3 Position { get; }
         public string Tag { get; }
         public int Layer { get; }
+        public GameObject Owner { get; }
 
         public event UnityAction<ICollider> OnCollision;
 

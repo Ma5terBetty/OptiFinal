@@ -4,7 +4,7 @@ namespace Custom.Physics
 {
     public struct ColliderUtility
     {
-        public static bool IsBoxColliding(BoxCollider self, BoxCollider other)
+        public static bool IsBoxColliding(CBoxCollider self, CBoxCollider other)
         {
             if (self.transform == null || other.transform == null) return false;
             var selfPos = self.Position;

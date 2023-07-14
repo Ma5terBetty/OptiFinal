@@ -9,8 +9,9 @@ namespace Custom.Physics
     public abstract class Collider : MonoBehaviour, ICollider
     {
         public Vector3 Position => transform.position;
-        public string Tag { get; private set; }
-        public int Layer { get; private set; }
+        public string Tag => gameObject.tag;
+        public int Layer => gameObject.layer;
+        public GameObject Owner => gameObject;
         public event UnityAction<ICollider> OnCollision;
 
         private void Start()
@@ -23,12 +24,6 @@ namespace Custom.Physics
         {
             OnCollision?.Invoke(other);
         }
-        
-        public bool CompareTag(string tag)
-        {
-            return Tag == tag;
-        }
-        
         public bool CompareLayer(int layer)
         {
             return Layer == layer;
