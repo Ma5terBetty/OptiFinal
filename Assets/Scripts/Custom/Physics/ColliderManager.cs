@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using Collider = CustomPhysics.Collider;
+using Custom.UpdateManager;
 
-namespace CustomPhysics
+namespace Custom.Physics
 {
-    public class ColliderManager : MonoBehaviour
+    public class ColliderManager : PhysicsElement
     {
+        //Just for debug
+        [SerializeField] private int colliderCount;
         public static ColliderManager Instance { get; private set; }
-        [field: SerializeField] public List<Collider> Colliders { get; private set; }
+        public List<ICollider> Colliders { get; private set; }
 
         private void Awake()
         {
@@ -22,7 +23,12 @@ namespace CustomPhysics
                 Destroy(this);
             }
             
-            Colliders = new List<Collider>();
+            Colliders = new List<ICollider>();
+        }
+
+        public override void Tick()
+        {
+            CheckColliders();
         }
 
         public void CheckColliders()
@@ -40,25 +46,28 @@ namespace CustomPhysics
                     var other = Colliders[j];
                     if (curr.CheckCollision(other))
                     {
-                        curr.OnCollision?.Invoke(other);
+                        curr.InvokeCollision(other);
                     }
                 }
             }
         }
         
-        public void Add(Collider input)
+        public void Add(ICollider input)
         {
             if (Colliders.Contains(input)) return;
             
             Colliders.Add(input);
+            colliderCount++;
         }
 
-        public void Remove(Collider input)
+        public void Remove(ICollider input)
         {
             if (!Colliders.Contains(input)) return;
             
             Colliders.Remove(input);
+            colliderCount--;
         }
+
 
     }
 }

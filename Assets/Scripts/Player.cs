@@ -1,34 +1,28 @@
-using System.Collections;
-using System.Collections.Generic;
-using CustomPhysics;
+using Custom.Physics;
 using UnityEngine;
-using Collider = CustomPhysics.Collider;
+using Custom.UpdateManager;
 
 public class Player : GameplayElement
 {
-    /*CustomCollider collider;
-    CustomBody body;*/
-     
-    
     [SerializeField] private float playerSpeed = 5;
 
-    private Collider _collider;
-    private PhysicsBody _body;
+    private ICollider _collider;
+    private IBody _body;
+    private bool _hasCollider;
 
-    
     private void Awake()
     {
-        /*collider = GetComponent<CustomCollider>();
-        body = GetComponent<CustomBody>();*/
+        _collider = GetComponent<ICollider>();
+        _body = GetComponent<IBody>();
+
+        _hasCollider = _collider != null;
     }
 
-    private void Start()
+    protected override void Start()
     {
-        CustomUpdateManager.Instance.tickeableObjects.Add(this);
-        
-        var selfTransform = transform;
-        _collider = new CustomPhysics.BoxCollider(selfTransform,gameObject.tag,gameObject.layer, OnCollisionHandler);
-        _body = new PhysicsBody(selfTransform);
+        base.Start();
+
+        _collider.OnCollision += OnCollisionHandler;
     }
 
     public override void Tick()
@@ -52,7 +46,7 @@ public class Player : GameplayElement
         }
     }
 
-    private void OnCollisionHandler(Collider other)
+    private void OnCollisionHandler(ICollider other)
     {
         
     }

@@ -1,14 +1,14 @@
 ﻿using System;
 
-namespace CustomPhysics
+namespace Custom.Physics
 {
     public struct ColliderUtility
     {
         public static bool IsBoxColliding(BoxCollider self, BoxCollider other)
         {
-            if (self.SelfTransform == null || other.SelfTransform == null) return false;
-            var selfPos = self.SelfTransform.position;
-            var otherPos = other.SelfTransform.position;
+            if (self.transform == null || other.transform == null) return false;
+            var selfPos = self.Position;
+            var otherPos = other.Position;
 
             float distanceX = Math.Abs(selfPos.x - otherPos.x);
             float distanceY = Math.Abs(selfPos.y - otherPos.y);
