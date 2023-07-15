@@ -1,7 +1,18 @@
-﻿namespace Custom.UpdateManager
+﻿using System;
+using UnityEngine;
+
+namespace Custom.UpdateManager
 {
-    public class UpdateBehavior
+    public abstract class UpdateBehavior: MonoBehaviour, IUpdatable
     {
-        
+        protected virtual void OnEnable()
+        {
+            this.RegisterInManager();
+        }
+
+        protected virtual void OnDisable()
+        {
+            this.UnregisterInManager();    
+        }
     }
 }

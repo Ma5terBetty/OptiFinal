@@ -4,7 +4,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using Custom.UpdateManager;
 
-public class Ball : GameplayElement
+public class Ball : UpdateBehavior, IGameplayUpdate
 {
     [SerializeField] private float speed = 10;
 
@@ -24,10 +24,9 @@ public class Ball : GameplayElement
         _hasCollider = _collider != null;
     }
 
-    protected override void Start()
+    private void Start()
     {
-        base.Start();
-
+        
         if(_hasCollider)
             _collider.OnCollision += OnCollisionHandler;
 
@@ -45,7 +44,7 @@ public class Ball : GameplayElement
         SetDirection(0);
     }
 
-    public override void Tick()
+    public void Tick()
     {
         _body.SetVelocity(_currDirection * (speed * _speedMultiplier));
     }

@@ -1,7 +1,7 @@
 ﻿namespace Custom.UpdateManager
 {
-    public class IUIUpdate
+    public interface IUIUpdate : IUpdatable
     {
-        
+        void Tick();
     }
 }

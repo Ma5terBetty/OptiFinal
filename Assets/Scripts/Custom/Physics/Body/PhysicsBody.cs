@@ -4,11 +4,11 @@ using Custom.UpdateManager;
 
 namespace Custom.Physics
 {
-    public class PhysicsBody : PhysicsElement, IBody
+    public class PhysicsBody : UpdateBehavior, IBody,IPhysicsUpdate
     {
         public Vector3 Velocity { get; private set; }
 
-        public override void Tick()
+        public void Tick()
         {
             transform.position += Velocity * Time.deltaTime;
         }

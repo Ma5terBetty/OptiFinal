@@ -1,7 +1,7 @@
 ﻿namespace Custom.UpdateManager
 {
-    public interface IGameplayUpdate
+    public interface IGameplayUpdate : IUpdatable
     {
-        
+        void Tick();
     }
 }

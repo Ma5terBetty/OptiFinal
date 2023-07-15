@@ -8,9 +8,10 @@ namespace Custom.UpdateManager
     public class CustomUpdateManager : MonoBehaviour
     {
         public static CustomUpdateManager Instance;
-        [field: SerializeField] public List<UIElement> UIElements { get; private set; }
-        [field: SerializeField] public List<GameplayElement> GameplayElements { get; private set; }
-        [field: SerializeField] public List<PhysicsElement> PhysicsElements { get; private set; }
+
+        private readonly List<IGameplayUpdate> _gameplayUpdates = new List<IGameplayUpdate>();
+        private readonly List<IUIUpdate> _uiUpdates = new List<IUIUpdate>();
+        private readonly List<IPhysicsUpdate> _physicsUpdates = new List<IPhysicsUpdate>();
 
         float Gameplayfrequency = 0.01f;
         float GameplayFrameCounter = 0;
@@ -51,10 +52,10 @@ namespace Custom.UpdateManager
                 //frameCounter++;
             }
         }
-        
+
         private void UITick()
         {
-            foreach (var element in UIElements)
+            foreach (var element in _uiUpdates)
             {
                 element.Tick();
             }
@@ -64,7 +65,7 @@ namespace Custom.UpdateManager
         //Updateo los elementos del Gameplay
         private void GameplayTick()
         {
-            foreach (var element in GameplayElements)
+            foreach (var element in _gameplayUpdates)
             {
                 element.Tick();
             }
@@ -72,71 +73,47 @@ namespace Custom.UpdateManager
 
         private void PhysicsTick()
         {
-            foreach (var element in PhysicsElements)
+            foreach (var element in _physicsUpdates)
             {
                 element.Tick();
             }
         }
 
-        #region UI
-
-        public void AddUIElement(UIElement element)
+        public void Register(IUpdatable input)
         {
-            UIElements ??= new List<UIElement>();
+            if (input is IUIUpdate ui)
+            {
+                _uiUpdates.Add(ui);
+            }
 
-            if (UIElements.Contains(element)) return;
-            
-            UIElements.Add(element);
+            if (input is IGameplayUpdate gameplay)
+            {
+                _gameplayUpdates.Add(gameplay);
+            }
+
+            if (input is IPhysicsUpdate physics)
+            {
+                _physicsUpdates.Add(physics);
+            }
         }
         
-        public void RemoveUIElement(UIElement element)
+        public void Unregister(IUpdatable input)
         {
-            if (!UIElements.Contains(element)) return;
-            
-            UIElements.Remove(element);
+            if (input is IUIUpdate ui)
+            {
+                _uiUpdates.Remove(ui);
+            }
+
+            if (input is IGameplayUpdate gameplay)
+            {
+                _gameplayUpdates.Remove(gameplay);
+            }
+
+            if (input is IPhysicsUpdate physics)
+            {
+                _physicsUpdates.Remove(physics);
+            }
         }
-
-        #endregion
-
-        #region Gameplay
-
-        public void AddGameplayElement(GameplayElement element)
-        {
-            GameplayElements ??= new List<GameplayElement>();
-
-            if (GameplayElements.Contains(element)) return;
-
-            GameplayElements.Add(element);
-        }
-
-        public void RemoveGameplayElement(GameplayElement element)
-        {
-            if (!GameplayElements.Contains(element)) return;
-
-            GameplayElements.Remove(element);
-        }
-
-        #endregion
-
-        #region Physics
-
-        public void AddPhysicsElement(PhysicsElement element)
-        {
-            PhysicsElements ??= new List<PhysicsElement>();
-
-            if (PhysicsElements.Contains(element)) return;
-
-            PhysicsElements.Add(element);
-        }
-
-        public void RemovePhysicsElement(PhysicsElement element)
-        {
-            if (!PhysicsElements.Contains(element)) return;
-
-            PhysicsElements.Remove(element);
-        }
-
-        #endregion
 
     }
 }

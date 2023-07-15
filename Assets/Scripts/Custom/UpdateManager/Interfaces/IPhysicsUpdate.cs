@@ -1,7 +1,7 @@
 ﻿namespace Custom.UpdateManager
 {
-    public class IPhysicsUpdate
+    public interface IPhysicsUpdate : IUpdatable
     {
-        
+        void Tick();
     }
 }
