@@ -1,8 +1,10 @@
+using System;
 using Custom.Physics;
 using UnityEngine;
 using Custom.UpdateManager;
+using Random = UnityEngine.Random;
 
-public class Player : GameplayElement
+public class Player : UpdateBehavior, IGameplayUpdate
 {
     [SerializeField] private float playerSpeed = 5;
 
@@ -18,14 +20,12 @@ public class Player : GameplayElement
         _hasCollider = _collider != null;
     }
 
-    protected override void Start()
+    private void Start()
     {
-        base.Start();
-
         _collider.OnCollision += OnCollisionHandler;
     }
 
-    public override void Tick()
+    public void Tick()
     {
         PlayerInput();
     }

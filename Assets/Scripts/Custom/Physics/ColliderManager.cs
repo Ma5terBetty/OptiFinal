@@ -5,7 +5,7 @@ using Custom.UpdateManager;
 
 namespace Custom.Physics
 {
-    public class ColliderManager : PhysicsElement
+    public class ColliderManager : UpdateBehavior, IPhysicsUpdate
     {
         //Just for debug
         [SerializeField] private int colliderCount;
@@ -26,7 +26,7 @@ namespace Custom.Physics
             Colliders = new List<ICollider>();
         }
 
-        public override void Tick()
+        public void Tick()
         {
             CheckColliders();
         }
