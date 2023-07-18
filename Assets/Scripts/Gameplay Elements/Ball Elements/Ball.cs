@@ -6,7 +6,9 @@ using UnityEngine;
 using Custom.UpdateManager;
 using UnityEngine.Events;
 
-public class Ball : UpdateBehavior, IGameplayUpdate, ICustomPoolable<Ball>
+namespace GameplayElements
+{
+    public class Ball : UpdateBehavior, IGameplayUpdate, ICustomPoolable<Ball>
 {
     [SerializeField] private float speed = 10;
 
@@ -99,4 +101,5 @@ public class Ball : UpdateBehavior, IGameplayUpdate, ICustomPoolable<Ball>
     {
         gameObject.SetActive(false);
     }
+}
 }

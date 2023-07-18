@@ -1,6 +1,6 @@
 ﻿using System;
 using Custom.UpdateManager;
-using Gameplay_Elements;
+using GameplayElements;
 using UnityEngine;
 
 public class InputsController : UpdateBehavior, IGameplayUpdate, IPhysicsUpdate

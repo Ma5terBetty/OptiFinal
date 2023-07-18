@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace Gameplay_Elements
+namespace GameplayElements
 {
     public class BallController : MonoBehaviour
     {
