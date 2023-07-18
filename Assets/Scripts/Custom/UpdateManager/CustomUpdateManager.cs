@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Custom.Physics;
+using TMPro;
 using UnityEngine;
 
 namespace Custom.UpdateManager
@@ -13,7 +14,9 @@ namespace Custom.UpdateManager
         private readonly List<IUIUpdate> _uiUpdates = new List<IUIUpdate>();
         private readonly List<IPhysicsUpdate> _physicsUpdates = new List<IPhysicsUpdate>();
 
-        float Gameplayfrequency = 0.01f;
+        [SerializeField] private TMP_Text UIFPSCounter;
+
+        [SerializeField] float Gameplayfrequency = 0.016f;
         float GameplayFrameCounter = 0;
 
         float timeCounter = 0;
@@ -49,8 +52,11 @@ namespace Custom.UpdateManager
                 GameplayTick();
                 UITick();
                 GameplayFrameCounter = 0;
-                //frameCounter++;
+                frameCounter++;
             }
+
+            var result = frameCounter / Time.time;
+            UIFPSCounter.text = Mathf.RoundToInt(result).ToString();
         }
 
         private void UITick()
