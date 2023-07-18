@@ -16,6 +16,8 @@ public class Ball : UpdateBehavior, IGameplayUpdate
     private IBody _body;
     private bool _hasCollider;
 
+    private bool isInitialized;
+
     private void Awake()
     {
         _collider = GetComponent<ICollider>();
@@ -26,10 +28,10 @@ public class Ball : UpdateBehavior, IGameplayUpdate
 
     private void Start()
     {
+        isInitialized = false;
         
         if(_hasCollider)
             _collider.OnCollision += OnCollisionHandler;
-
 
         _directions = new[]
         {
@@ -46,7 +48,14 @@ public class Ball : UpdateBehavior, IGameplayUpdate
 
     public void Tick()
     {
-        _body.SetVelocity(_currDirection * (speed * _speedMultiplier));
+        if (Input.GetKey(KeyCode.Space) && !isInitialized)
+        {
+            isInitialized = !isInitialized;
+        }
+        if (isInitialized)
+        {
+            _body.SetVelocity(_currDirection * (speed * _speedMultiplier));
+        }
     }
 
     public void SetDirection(int index)
@@ -56,7 +65,7 @@ public class Ball : UpdateBehavior, IGameplayUpdate
 
     private void OnCollisionHandler(ICollider other)
     {
-        Debug.Log("Here");
-        _speedMultiplier *= -1;
+        Debug.Log("Esto es la colisión");
+        //_speedMultiplier *= -1;
     }
 }
