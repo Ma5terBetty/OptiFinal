@@ -67,7 +67,5 @@ namespace Custom.Physics
             Colliders.Remove(input);
             colliderCount--;
         }
-
-
     }
 }
