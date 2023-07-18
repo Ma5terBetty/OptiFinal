@@ -1,11 +1,12 @@
 ﻿using System;
+using _Custom.Pool;
 using Custom.Physics;
 using Unity.VisualScripting;
 using UnityEngine;
 using Custom.UpdateManager;
 using UnityEngine.Events;
 
-public class Ball : UpdateBehavior, IGameplayUpdate
+public class Ball : UpdateBehavior, IGameplayUpdate, ICustomPoolable<Ball>
 {
     [SerializeField] private float speed = 10;
 
@@ -18,8 +19,7 @@ public class Ball : UpdateBehavior, IGameplayUpdate
 
     private bool _isFroze;
     private bool _hasCollider;
-
-    public UnityAction<Ball> OnDestroyed;
+    public event Action<Ball> OnRecycle;
 
     private void Awake()
     {
@@ -30,10 +30,9 @@ public class Ball : UpdateBehavior, IGameplayUpdate
         {
             _collider.OnCollision += OnCollisionHandler;
         }
-    }
 
-    private void Start()
-    {
+        OnRecycle += OnRecycleHandler;
+        
         _directions = new[]
         {
             Vector3.forward,                  // Forward 0
@@ -82,7 +81,22 @@ public class Ball : UpdateBehavior, IGameplayUpdate
     {
         if (other.Layer == LayerMask.NameToLayer("Limit"))
         {
-            OnDestroyed?.Invoke(this);
+           OnRecycle?.Invoke(this);
         }
+    }
+
+    public void Recycle()
+    {
+        OnRecycle?.Invoke(this);
+    }
+
+    public void Reset()
+    {
+        gameObject.SetActive(true);
+    }
+    
+    private void OnRecycleHandler(Ball self)
+    {
+        gameObject.SetActive(false);
     }
 }

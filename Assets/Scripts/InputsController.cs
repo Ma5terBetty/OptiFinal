@@ -22,6 +22,12 @@ public class InputsController : UpdateBehavior, IGameplayUpdate, IPhysicsUpdate
         if (_hasBall)
         {
             BallController();
+
+            //Testing
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                ballController.AddBall(player.transform);
+            }
         }
     }
 

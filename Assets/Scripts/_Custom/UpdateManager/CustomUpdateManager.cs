@@ -55,9 +55,10 @@ namespace Custom.UpdateManager
 
         private void UITick()
         {
-            foreach (var element in _uiUpdates)
+            for (var index = 0; index < _uiUpdates.Count; index++)
             {
-                element.Tick();
+                var element = _uiUpdates[index];
+                element?.Tick();
             }
         }
 
@@ -65,17 +66,19 @@ namespace Custom.UpdateManager
         //Updateo los elementos del Gameplay
         private void GameplayTick()
         {
-            foreach (var element in _gameplayUpdates)
+            for (var index = 0; index < _gameplayUpdates.Count; index++)
             {
-                element.Tick();
+                var element = _gameplayUpdates[index];
+                element?.Tick();
             }
         }
 
         private void PhysicsTick()
         {
-            foreach (var element in _physicsUpdates)
+            for (var index = 0; index < _physicsUpdates.Count; index++)
             {
-                element.Tick();
+                var element = _physicsUpdates[index];
+                element?.Tick();
             }
         }
 
